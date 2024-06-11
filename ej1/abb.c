@@ -18,18 +18,38 @@ static bool elem_less(abb_elem a, abb_elem b) {
     return a < b;
 }
 
+static bool izq_ord(abb_elem e, abb tree){ 
+    bool izq = true;
+    if(tree != NULL){
+        izq = elem_less(tree->elem, e) && izq_ord(e, tree->left) 
+        && izq_ord(e, tree->right);
+    }
+    return izq;
+}
+
+static bool der_ord(abb_elem e, abb tree){ 
+    bool der = true;
+    if(tree != NULL){
+        der = elem_less(e, tree->elem) && der_ord(e, tree->left) 
+        && der_ord(e, tree->right); 
+    }
+return der;
+}
+
 static bool invrep(abb tree) {
-    /*
-     * Needs implementation
-     */
-    return true;
+    /* ¬(Need implementation) */
+    bool res = true;
+    if(tree != NULL){
+        res = izq_ord(tree->elem, tree->left) && der_ord(tree->elem, tree->right)
+        && invrep(tree->left) && invrep(tree->right);
+    }
+
+    return res;
 }
 
 abb abb_empty(void) {
-    abb tree;
-    /*
-     * Needs implementation
-     */
+    abb tree= NULL;
+    /* ¬(Need implementation) */
     assert(invrep(tree) && abb_is_empty(tree));
     return tree;
 }
@@ -46,10 +66,8 @@ abb abb_add(abb tree, abb_elem e) {
 bool abb_is_empty(abb tree) {
     bool is_empty=false;
     assert(invrep(tree));
-    /*
-     * Needs implementation
-     */
-    return is_empty;
+    /* ¬(Need implementation) */
+    return is_empty = (tree == NULL);
 }
 
 bool abb_exists(abb tree, abb_elem e) {
