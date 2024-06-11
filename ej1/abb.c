@@ -55,10 +55,18 @@ abb abb_empty(void) {
 }
 
 abb abb_add(abb tree, abb_elem e) {
+    /* ¬(Need implementation) */
     assert(invrep(tree));
-    /*
-     * Needs implementation
-     */
+    if (tree == NULL) {
+        tree = malloc(sizeof(struct _s_abb));
+        tree->elem = e;
+        tree->left = NULL;
+        tree->right = NULL;
+    } else if (elem_less(e, tree->elem)) {
+        tree->left = abb_add(tree->left, e);
+    } else if (elem_less(tree->elem, e)) {
+        tree->right = abb_add(tree->right, e);
+    }
     assert(invrep(tree) && abb_exists(tree, e));
     return tree;
 }
@@ -106,9 +114,31 @@ unsigned int abb_length(abb tree) {
 
 abb abb_remove(abb tree, abb_elem e) {
     assert(invrep(tree));
-    /*
-     * Needs implementation
-     */
+    /* ¬(Need implementation) */
+    if (tree == NULL) {
+        return NULL;
+    } else if (elem_less(e, tree->elem)) {
+        tree->left = abb_remove(tree->left, e);
+    } else if (elem_less(tree->elem, e)) {
+        tree->right = abb_remove(tree->right, e);
+    } else {
+        if (tree->left == NULL && tree->right == NULL) {
+            free(tree);
+            tree = NULL;
+        } else if (tree->left == NULL) {
+            abb temp = tree;
+            tree = tree->right;
+            free(temp);
+        } else if (tree->right == NULL) {
+            abb temp = tree;
+            tree = tree->left;
+            free(temp);
+        } else {
+            abb_elem max_left = abb_max(tree->left);
+            tree->elem = max_left;
+            tree->left = abb_remove(tree->left, max_left);
+        }
+    }
     assert(invrep(tree) && !abb_exists(tree, e));
     return tree;
 }
@@ -133,7 +163,7 @@ abb_elem abb_max(abb tree) {
         pointer = pointer->right;
     }
     max_e = pointer->elem;
-    
+
     assert(invrep(tree) && abb_exists(tree, max_e));
     return max_e;
 }
@@ -158,16 +188,22 @@ void abb_dump(abb tree, abb_ordtype ord) {
     assert(invrep(tree) && (ord==ABB_IN_ORDER  || 
                             ord==ABB_PRE_ORDER ||
                             ord==ABB_POST_ORDER));
-    /*
-     * c) Needs implementation: use the dump order indicated by `ord`
-     *
-     */
+     /* ¬(Need implementation) */
 
-    // Implementing in-order as default
     if (tree != NULL) {
-        abb_dump(tree->left, ord);
-        printf("%d ", tree->elem);
-        abb_dump(tree->right, ord);
+        if (ord == ABB_IN_ORDER) {
+            abb_dump(tree->left, ord);
+            printf("%d ", tree->elem);
+            abb_dump(tree->right, ord);
+        } else if (ord == ABB_PRE_ORDER) {
+            printf("%d ", tree->elem);
+            abb_dump(tree->left, ord);
+            abb_dump(tree->right, ord);
+        } else if (ord == ABB_POST_ORDER) {
+            abb_dump(tree->left, ord);
+            abb_dump(tree->right, ord);
+            printf("%d ", tree->elem);
+        }
     }
 }
 
