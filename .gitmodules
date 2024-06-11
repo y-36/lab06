@@ -1,0 +1,3 @@
+[submodule "ej3/diccionario"]
+	path = ej3/diccionario
+	url = https://github.com/y-36/Diccionario.git
