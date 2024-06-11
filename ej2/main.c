@@ -3,7 +3,7 @@
 
 int main(void) {
     string str1 = string_create("hello");
-    string str2 = string_create("world");
+    string str2 = string_create("worlds");
     string str3 = string_create("hello");
 
     // Comparar str1 con str2
